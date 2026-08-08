@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Manimegalai I | Full-Stack Web Developer</title>
+<style>
+  :root{
+    --bg: #0a0e14;
+    --bg-panel: #101623;
+    --line: #1f2a3d;
+    --text: #e7edf5;
+    --muted: #8ea0b8;
+    --accent: #45e0c4;
+    --accent-2: #4d8dff;
+    --mono: 'IBM Plex Mono', 'Courier New', monospace;
+    --sans: 'Inter', -apple-system, 'Segoe UI', sans-serif;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body{ background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.6; }
+
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity:0.25;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  header, main, footer { position:relative; z-index:1; }
+  .wrap{ max-width:920px; margin:0 auto; padding:0 24px; }
+
+  nav{
+    position:sticky; top:0; z-index:10;
+    backdrop-filter:blur(10px);
+    background:rgba(10,14,20,0.8);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{ display:flex; justify-content:space-between; align-items:center; height:64px; }
+  .logo{ font-family:var(--mono); font-size:14px; letter-spacing:1px; color:var(--accent); }
+  .logo span{ color:var(--muted); }
+  nav ul{ list-style:none; display:flex; gap:24px; flex-wrap:wrap; }
+  nav a{ color:var(--muted); text-decoration:none; font-size:13px; font-family:var(--mono); transition:color .2s; }
+  nav a:hover{ color:var(--accent); }
+
+  .hero{ padding:110px 0 90px; }
+  .eyebrow{
+    font-family:var(--mono); font-size:13px; color:var(--accent);
+    display:flex; align-items:center; gap:10px; margin-bottom:22px;
+  }
+  .eyebrow::before{
+    content:""; width:8px; height:8px; border-radius:50%;
+    background:var(--accent); box-shadow:0 0 8px var(--accent);
+  }
+  h1{ font-size:50px; font-weight:700; letter-spacing:-1px; line-height:1.1; margin-bottom:18px; }
+  h1 .accent{ color:var(--accent); }
+  .hero p.lead{ font-size:18px; color:var(--muted); max-width:600px; margin-bottom:34px; }
+  .cta-row{ display:flex; gap:14px; flex-wrap:wrap; }
+  .btn{
+    font-family:var(--mono); font-size:14px; text-decoration:none;
+    padding:12px 22px; border-radius:6px; transition:all .2s; display:inline-block;
+  }
+  .btn-primary{ background:var(--accent); color:#04140f; font-weight:600; }
+  .btn-primary:hover{ box-shadow:0 0 20px rgba(69,224,196,0.4); transform:translateY(-1px); }
+  .btn-ghost{ border:1px solid var(--line); color:var(--text); }
+  .btn-ghost:hover{ border-color:var(--accent); color:var(--accent); }
+
+  .diagram{ margin-top:70px; }
+  .diagram svg{ width:100%; height:auto; display:block; }
+  .node-label{ font-family:var(--mono); font-size:11px; fill:var(--muted); }
+  .node-box{ fill:var(--bg-panel); stroke:var(--line); stroke-width:1; }
+  .node-box.active{ stroke:var(--accent); }
+  .diagram-line{ stroke:var(--line); stroke-width:1.5; fill:none; }
+  .diagram-line.flow{ stroke:var(--accent-2); stroke-dasharray:4 4; animation: dash 20s linear infinite; }
+  @keyframes dash{ to{ stroke-dashoffset:-200; } }
+
+  section{ padding:70px 0; border-top:1px solid var(--line); }
+  .section-head{ display:flex; align-items:baseline; gap:14px; margin-bottom:36px; }
+  .section-num{ font-family:var(--mono); color:var(--accent); font-size:14px; }
+  h2{ font-size:26px; font-weight:700; }
+
+  .about-grid{ display:grid; grid-template-columns:1.4fr 1fr; gap:40px; }
+  .about-grid p{ color:var(--muted); margin-bottom:16px; }
+  .stat-box{ border:1px solid var(--line); border-radius:8px; padding:18px; background:var(--bg-panel); }
+  .stat-box + .stat-box{ margin-top:14px; }
+  .stat-num{ font-family:var(--mono); color:var(--accent); font-size:22px; font-weight:700; }
+  .stat-label{ font-size:13px; color:var(--muted); }
+
+  .skill-groups{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .skill-card{ border:1px solid var(--line); border-radius:8px; padding:20px; background:var(--bg-panel); }
+  .skill-card h3{ font-family:var(--mono); font-size:13px; color:var(--accent); margin-bottom:12px; text-transform:uppercase; letter-spacing:0.5px; }
+  .skill-card ul{ list-style:none; color:var(--muted); font-size:14px; }
+  .skill-card li{ padding:4px 0; border-bottom:1px dashed var(--line); }
+  .skill-card li:last-child{ border-bottom:none; }
+
+  .project{
+    border:1px solid var(--line); border-radius:8px; padding:26px;
+    background:var(--bg-panel); margin-bottom:18px; transition:border-color .2s;
+  }
+  .project:hover{ border-color:var(--accent); }
+  .project h3{ font-size:18px; margin-bottom:10px; }
+  .project ul{ color:var(--muted); font-size:14px; margin:0 0 14px 18px; }
+  .project ul li{ margin-bottom:6px; }
+  .tag-row{ display:flex; gap:8px; flex-wrap:wrap; }
+  .tag{
+    font-family:var(--mono); font-size:11px; color:var(--accent-2);
+    border:1px solid var(--line); padding:3px 9px; border-radius:20px;
+  }
+
+  .exp-item{
+    border:1px solid var(--line); border-radius:8px; padding:22px;
+    background:var(--bg-panel); margin-bottom:16px;
+  }
+  .exp-top{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
+  .exp-title{ font-size:16px; font-weight:600; }
+  .exp-date{ font-family:var(--mono); font-size:12px; color:var(--muted); }
+  .exp-item ul{ color:var(--muted); font-size:14px; margin-left:18px; }
+  .exp-item ul li{ margin-bottom:6px; }
+
+  .cert-list{ display:grid; grid-template-columns:repeat(1,1fr); gap:12px; }
+  .cert{
+    border:1px solid var(--line); border-radius:8px; padding:14px 18px;
+    background:var(--bg-panel); font-size:14px;
+  }
+
+  .edu-item{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px; padding:14px 0; border-bottom:1px dashed var(--line); }
+  .edu-item:last-child{ border-bottom:none; }
+  .edu-name{ font-weight:600; }
+  .edu-meta{ font-family:var(--mono); font-size:12px; color:var(--muted); }
+
+  .contact-box{
+    border:1px solid var(--line); border-radius:10px; padding:40px;
+    background:var(--bg-panel); text-align:center;
+  }
+  .contact-box h2{ margin-bottom:10px; }
+  .contact-box p{ color:var(--muted); margin-bottom:26px; }
+  .contact-links{ display:flex; justify-content:center; gap:14px; flex-wrap:wrap; }
+
+  footer{ padding:30px 0; text-align:center; color:var(--muted); font-family:var(--mono); font-size:12px; }
+
+  @media (max-width:720px){
+    h1{ font-size:32px; }
+    .about-grid, .skill-groups{ grid-template-columns:1fr; }
+    nav ul{ gap:14px; }
+  }
+
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  @media (prefers-reduced-motion: reduce){
+    .diagram-line.flow{ animation:none; }
+    html{ scroll-behavior:auto; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="logo">MANI<span>_</span>MEGALAI</div>
+    <ul>
+      <li><a href="#about">about</a></li>
+      <li><a href="#skills">skills</a></li>
+      <li><a href="#projects">projects</a></li>
+      <li><a href="#experience">experience</a></li>
+      <li><a href="#education">education</a></li>
+      <li><a href="#contact">contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">OPEN TO INTERNSHIP / ENTRY-LEVEL ROLES</div>
+    <h1>Manimegalai I<br>Full-Stack <span class="accent">Web Developer</span></h1>
+    <p class="lead">
+      I build role-based, database-driven web applications with Python (Django, Flask),
+      JavaScript, and MySQL/SQLite3. Three end-to-end academic projects and a
+      cloud-focused development internship behind me — looking for a Software /
+      Web Development internship to grow further in production environments.
+    </p>
+    <div class="cta-row">
+      <a href="#projects" class="btn btn-primary">View Projects</a>
+      <a href="#" class="btn btn-ghost">Download Resume</a>
+      <a href="mailto:manimegalaii2005@gmail.com" class="btn btn-ghost">Email Me</a>
+    </div>
+
+    <div class="diagram">
+      <svg viewBox="0 0 860 220" xmlns="http://www.w3.org/2000/svg">
+        <path class="diagram-line flow" d="M110,110 H300"/>
+        <path class="diagram-line flow" d="M420,110 H610"/>
+        <path class="diagram-line" d="M300,110 V60 H420 V110"/>
+        <path class="diagram-line" d="M300,110 V160 H420 V110"/>
+        <path class="diagram-line flow" d="M730,110 H820"/>
+
+        <rect class="node-box active" x="20" y="85" width="90" height="50" rx="6"/>
+        <text class="node-label" x="65" y="115" text-anchor="middle">USER UI</text>
+
+        <rect class="node-box" x="300" y="35" width="120" height="50" rx="6"/>
+        <text class="node-label" x="360" y="65" text-anchor="middle">DJANGO / FLASK</text>
+
+        <rect class="node-box" x="300" y="135" width="120" height="50" rx="6"/>
+        <text class="node-label" x="360" y="165" text-anchor="middle">REST API</text>
+
+        <rect class="node-box active" x="610" y="85" width="120" height="50" rx="6"/>
+        <text class="node-label" x="670" y="115" text-anchor="middle">AUTH / ROLES</text>
+
+        <rect class="node-box" x="750" y="85" width="90" height="50" rx="6"/>
+        <text class="node-label" x="795" y="115" text-anchor="middle">MySQL DB</text>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section id="about">
+    <div class="wrap">
+      <div class="section-head"><span class="section-num">01</span><h2>About</h2></div>
+      <div class="about-grid">
+        <div>
+          <p>
+            I'm a Full-Stack Web Developer with hands-on experience building
+            role-based, database-driven applications using Python (Django, Flask),
+            JavaScript, and MySQL/SQLite3.
+          </p>
+          <p>
+            I've delivered three end-to-end academic projects and completed a
+            cloud-focused development internship, combining strong front-end
+            fundamentals with back-end API and database design. I pick up new
+            frameworks quickly, write clean maintainable code, and collaborate
+            well across cross-functional teams.
+          </p>
+        </div>
+        <div>
+          <div class="stat-box">
+            <div class="stat-num">3</div>
+            <div class="stat-label">End-to-end projects delivered</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">7.8</div>
+            <div class="stat-label">CGPA</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">Django</div>
+            <div class="stat-label">+ Flask, MySQL</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="wrap">
+      <div class="section-head"><span class="section-num">02</span><h2>Skills</h2></div>
+      <div class="skill-groups">
+        <div class="skill-card">
+          <h3>Frontend</h3>
+          <ul>
+            <li>HTML5</li>
+            <li>CSS3</li>
+            <li>JavaScript</li>
+            <li>Responsive UI Design</li>
+          </ul>
+        </div>
+        <div class="skill-card">
+          <h3>Backend</h3>
+          <ul>
+            <li>Python</li>
+            <li>Django</li>
+            <li>Flask</li>
+            <li>RESTful API Integration</li>
+          </ul>
+        </div>
+        <div class="skill-card">
+          <h3>Databases &amp; Tools</h3>
+          <ul>
+            <li>MySQL / SQLite3</li>
+            <li>Relational Schema Design</li>
+            <li>Git &amp; GitHub</li>
+            <li>C, C++, VS Code</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="wrap">
+      <div class="section-head"><span class="section-num">03</span><h2>Projects</h2></div>
+
+      <div class="project">
+        <h3>EduConnect — Online Education Platform with Role-Based Access</h3>
+        <ul>
+          <li>Architected and built a full-stack education platform with distinct student, instructor, and admin roles, enforcing secure permission-based access across the application.</li>
+          <li>Engineered backend logic in Django/Flask backed by a relational database to manage courses, users, and content, streamlining data flow between the three user roles.</li>
+        </ul>
+        <div class="tag-row">
+          <span class="tag">Django</span>
+          <span class="tag">Flask</span>
+          <span class="tag">Role-Based Access</span>
+        </div>
+      </div>
+
+      <div class="project">
+        <h3>Online Blood Donation Management System</h3>
+        <ul>
+          <li>Built a full-stack web application connecting blood donors and recipients, enabling donor registration, real-time search, and request tracking.</li>
+          <li>Designed a normalized MySQL/SQLite3 schema to manage donor records, blood-group inventory, and donation history, improving data accuracy and retrieval speed.</li>
+        </ul>
+        <div class="tag-row">
+          <span class="tag">MySQL</span>
+          <span class="tag">SQLite3</span>
+          <span class="tag">Full-Stack</span>
+        </div>
+      </div>
+
+      <div class="project">
+        <h3>AI-Powered Chatbot Assistant</h3>
+        <ul>
+          <li>Developed an intelligent chatbot in Python to automate responses to user queries, reducing manual query handling and improving user accessibility.</li>
+          <li>Integrated NLP-based logic to generate dynamic, context-aware responses, enhancing overall user engagement.</li>
+        </ul>
+        <div class="tag-row">
+          <span class="tag">Python</span>
+          <span class="tag">NLP</span>
+          <span class="tag">Chatbot</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="wrap">
+      <div class="section-head"><span class="section-num">04</span><h2>Internship Experience</h2></div>
+      <div class="exp-item">
+        <div class="exp-top">
+          <div class="exp-title">Py-Cloud Architect (PCA) Intern — Indra Institute of Education (IIE), Coimbatore</div>
+        </div>
+        <ul>
+          <li>Gained hands-on exposure to Python-based cloud architecture concepts and end-to-end application development workflows.</li>
+          <li>Applied backend development and database design principles to real-world project scenarios under senior mentorship.</li>
+        </ul>
+      </div>
+
+      <div class="section-head" style="margin-top:40px;"><span class="section-num">05</span><h2>Certifications</h2></div>
+      <div class="cert-list">
+        <div class="cert">Salesforce Developer — Agent Blazer Champion Course</div>
+        <div class="cert">Foundations of Coding with Python</div>
+        <div class="cert">Fundamentals of Web Development</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="education">
+    <div class="wrap">
+      <div class="section-head"><span class="section-num">06</span><h2>Education</h2></div>
+      <div class="edu-item">
+        <div class="edu-name">Bachelor's Degree — Government Arts College, Coimbatore</div>
+        <div class="edu-meta">2023 – 2026 · CGPA: 7.8</div>
+      </div>
+      <div class="edu-item">
+        <div class="edu-name">Higher Secondary Education — SKN Government Higher Secondary School, Coimbatore</div>
+        <div class="edu-meta">2020 – 2023 · 82%</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <div class="contact-box">
+        <h2>Let's connect</h2>
+        <p>Open to Software Development and Web Development internship opportunities.</p>
+        <div class="contact-links">
+          <a href="mailto:manimegalaii2005@gmail.com" class="btn btn-primary">Email</a>
+          <a href="tel:8015047743" class="btn btn-ghost">Call</a>
+          <a href="https://www.linkedin.com/in/yourprofile" class="btn btn-ghost">LinkedIn</a>
+          <a href="https://github.com/MANIMEGALAI-207" class="btn btn-ghost">GitHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">© 2026 Manimegalai I · Coimbatore, Tamil Nadu</div>
+</footer>
+
+</body>
+</html>
